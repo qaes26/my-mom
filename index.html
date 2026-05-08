@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد يا أم قيس</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        royal: {
+                            50: '#fbf8f9',
+                            100: '#f5edf0',
+                            800: '#831843', // لون خمري ملكي
+                            900: '#4c0519',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fbf8f9;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* كلاسات الأنيميشن عند التمرير */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* خط الزمن (Timeline) */
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: linear-gradient(to bottom, transparent, #831843, #f59e0b, transparent);
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            width: 50%;
+            padding: 0 40px;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: left;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: right;
+        }
+
+        /* الدائرة الذهبية على الخط */
+        .timeline-dot {
+            position: absolute;
+            top: 30px;
+            width: 24px;
+            height: 24px;
+            background-color: #f59e0b;
+            border: 4px solid #fff;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        .timeline-item:nth-child(odd) .timeline-dot { right: -12px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -12px; }
+
+        /* إطار الصور الفاخر */
+        .photo-frame {
+            position: relative;
+            background: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(131, 24, 67, 0.15);
+            transition: transform 0.4s ease;
+        }
+        .photo-frame:hover {
+            transform: scale(1.03) translateY(-5px);
+        }
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px dashed #f59e0b;
+            margin: 8px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .photo-frame img {
+            border-radius: 6px;
+            width: 100%;
+            height: auto;
+            max-height: 450px;
+            object-fit: cover;
+        }
+
+        /* المشغل العائم */
+        .floating-player {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px 10px 10px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(131, 24, 67, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            transition: transform 0.3s;
+        }
+        .floating-player:hover { transform: translateY(-5px); }
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #831843, #4c0519);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(131, 24, 67, 0.4);
+        }
+        .play-btn.playing { animation: pulse-ring 2s infinite; }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(131, 24, 67, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(131, 24, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(131, 24, 67, 0); }
+        }
+
+        /* للموبايل */
+        @media (max-width: 768px) {
+            .timeline-container::before { left: 30px; }
+            .timeline-item { width: 100%; padding-left: 60px; padding-right: 20px; text-align: right !important; left: 0 !important; }
+            .timeline-item:nth-child(odd) .timeline-dot, .timeline-item:nth-child(even) .timeline-dot { left: 18px; right: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مشغل الموسيقى -->
+    <audio id="bg-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="floating-player">
+        <div class="play-btn" id="play-pause-btn">
+            <i class="fas fa-play ml-1" id="play-icon"></i>
+        </div>
+        <div class="text-sm font-bold text-royal-800">
+            <span id="player-text">إهداء لأم قيس 🎵</span>
+            <div class="text-xs text-gray-500 font-normal">شغّل الأغنية واقرأ</div>
+        </div>
+    </div>
+
+    <!-- قسم البداية (الهيرو) - تهنئة عيد الميلاد -->
+    <header class="min-h-screen relative flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-gradient-to-br from-royal-900 via-royal-800 to-black">
+        <!-- تأثيرات بصرية للخلفية -->
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at center, #fbbf24 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="relative z-10 text-white max-w-4xl reveal active mt-10">
+            <i class="fas fa-crown text-gold-400 text-5xl mb-6 animate-bounce"></i>
+            <h2 class="font-cairo text-gold-400 text-xl md:text-3xl font-bold mb-4 tracking-wider">اليوم ليس كأي يوم.. إنه يوم ميلاد جنتي</h2>
+            <h1 class="font-amiri text-6xl md:text-8xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-white drop-shadow-2xl">
+                كل عام وأنتِ بخير<br>يا أم قيس
+            </h1>
+            <p class="font-amiri text-2xl md:text-3xl italic text-gray-200 leading-relaxed mb-12 max-w-2xl mx-auto">
+                "في يوم ميلادكِ، لم أجد هدية توفيكِ حقكِ، فقررت أن أهديكِ (حصاد عمركِ).. رحلتي التي كنتِ أنتِ قبطانها، من صرختي الأولى، وحتى أصبحت رجلاً يعتمد عليه."
+            </p>
+            
+            <div class="flex flex-col items-center gap-3 text-gold-400/80">
+                <span class="font-cairo text-sm">اسحبي للأسفل لترَيْ حصاد تعبكِ</span>
+                <i class="fas fa-arrow-down animate-bounce text-xl"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- رسالة حب وافتتاحية -->
+    <section class="py-16 px-4 bg-white text-center">
+        <div class="max-w-3xl mx-auto reveal">
+            <i class="fas fa-heart text-royal-800 text-4xl mb-4"></i>
+            <h2 class="font-amiri text-3xl md:text-4xl text-royal-900 font-bold mb-6">أمي الغالية.. كل صورة هنا هي قصة أنتِ بطلتها</h2>
+            <p class="font-cairo text-lg md:text-xl text-gray-600 leading-loose">
+                كبرتُ أمام عينيكِ، وفي كل مرحلة من عمري، كانت يداكِ هي السند، ودعواتكِ هي الدرع. في يوم ميلادكِ الميمون، أردت أن أريكِ كيف أزهرتِ في داخلي.. هذه مراحلي، وهذا أنا، ثمرة حبكِ وتعبكِ وسهركِ.
+            </p>
+        </div>
+    </section>
+
+    <!-- خط الزمن (مراحل العمر) مربوطة بعيد ميلادها -->
+    <section class="py-10 px-4 max-w-6xl mx-auto">
+        <div class="timeline-container">
+
+            <!-- المرحلة الأولى: الطفولة المبكرة -->
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="photo-frame">
+                            <img src="1000245043.jpg" alt="قيس في طفولته">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <span class="text-gold-500 font-bold text-lg mb-2 block">البذرة الأولى 🌱</span>
+                        <h3 class="font-amiri text-3xl font-bold text-royal-900 mb-4">بين يديكِ الحانيتين</h3>
+                        <p class="font-cairo text-gray-700 leading-relaxed text-lg">
+                            في هذه المرحلة، كنتُ لا أعرف من الدنيا سوى حضنكِ. سهرتِ الليالي الطوال لأنام، وتعبتِ لأرتاح. هذه النظرة البريئة والابتسامة كانت بفضل رعايتكِ واهتمامكِ بأدق تفاصيلي. شكراً على كل لحظة تعب في بداياتي.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المرحلة الثانية: الروضة -->
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="photo-frame">
+                            <img src="1000245042.jpg" alt="قيس في تخرج الروضة">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <span class="text-gold-500 font-bold text-lg mb-2 block">أولى خطوات النجاح 🎓</span>
+                        <h3 class="font-amiri text-3xl font-bold text-royal-900 mb-4">فرحتكِ بتخرجي الأول</h3>
+                        <p class="font-cairo text-gray-700 leading-relaxed text-lg">
+                            أتذكرين هذا اليوم؟ تخرجي من روضة البراء.. كانت فرحتكِ تسبق فرحتي، وعيناكِ تلمعان فخراً بهذا الإنجاز الصغير. أنتِ من علمني الحرف الأول، وأنتِ من ألبسني ثوب النجاح لأول مرة. كل عام وأنتِ معلمتي الأولى.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المرحلة الثالثة: الشباب -->
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="photo-frame">
+                            <img src="1000236288.jpg" alt="قيس في شبابه">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <span class="text-gold-500 font-bold text-lg mb-2 block">الثمرة التي كبرت بحبك 🌟</span>
+                        <h3 class="font-amiri text-3xl font-bold text-royal-900 mb-4">الرجل الذي يقف سنداً لكِ</h3>
+                        <p class="font-cairo text-gray-700 leading-relaxed text-lg">
+                            ها قد كبر الطفل، وأصبح شاباً يشتد به الظهر. اليوم يا أمي، في عيد ميلادك، أقف أمامكِ رجلاً يفخر بأنه "ابن أم قيس". كل ما أنا عليه اليوم، وكل ما سأكونه غداً، هو بفضل دعواتكِ ورضاكِ. أدامكِ الله تاجاً على رأسي.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- الخاتمة والتهنئة النهائية -->
+    <section class="py-20 px-4 bg-royal-50 text-center border-t border-royal-100">
+        <div class="max-w-2xl mx-auto reveal">
+            <h2 class="font-amiri text-4xl text-royal-900 font-bold mb-6">إلى أعظم أم في الوجود</h2>
+            <p class="font-cairo text-xl text-gray-700 mb-10 leading-relaxed">
+                عسى أيامكِ كلها أعياد ومسرات، وعمركِ مديد بالصحة والعافية. كل عام وأنتِ العيد لأيامنا، وكل عام وأنتِ النبض لقلوبنا.
+                <br><span class="text-royal-800 font-bold mt-4 block">أحبك جداً يا أمي ❤️</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- التوقيع (حسب الطلب) -->
+    <footer class="py-10 bg-white text-center pb-24">
+        <div class="reveal">
+            <div class="inline-flex flex-col items-center justify-center px-10 py-6 bg-gradient-to-br from-royal-50 to-white rounded-2xl shadow-lg border border-royal-100">
+                <i class="fas fa-gift text-royal-800 text-2xl mb-2"></i>
+                <p class="text-gray-500 font-cairo text-sm mb-1">صُنع بحب من إعداد</p>
+                <h3 class="font-cairo text-3xl font-black text-royal-900 tracking-wide">قيس جازي</h3>
+            </div>
+        </div>
+    </footer>
+
+    <!-- سكربت الموسيقى وحركة الظهور -->
+    <script>
+        // تشغيل الموسيقى
+        const audio = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const playerText = document.getElementById('player-text');
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playIcon.classList.remove('fa-play', 'ml-1');
+                    playIcon.classList.add('fa-pause');
+                    playBtn.classList.add('playing');
+                    playerText.innerHTML = 'جاري التشغيل... <i class="fas fa-heart text-royal-800 ml-1"></i>';
+                }).catch(e => console.log("Audio Error:", e));
+            } else {
+                audio.pause();
+                isPlaying = false;
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play', 'ml-1');
+                playBtn.classList.remove('playing');
+                playerText.innerHTML = 'إهداء لأم قيس 🎵';
+            }
+        });
+
+        // حركة الظهور عند التمرير
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 120;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        reveal(); // استدعاء أولي
+    </script>
+</body>
+</html>
+
+```
